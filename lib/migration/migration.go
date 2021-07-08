@@ -1,4 +1,5 @@
 // create table here
+// Add this function to main.go if you want to create new table
 
 package migration
 
@@ -10,6 +11,7 @@ import (
 
 func InitTable() (err error) {
 	db := db2.ConnectionGorm()
+
 	res := db.AutoMigrate(&tableModel.Nasabah{})
 	if res.Error != nil {
 		err = errors.New("[migration][initTable] while migrate table")
