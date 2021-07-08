@@ -1,0 +1,22 @@
+// create table here
+
+package migration
+
+import (
+	db2 "embrio-dev/lib/db"
+	"embrio-dev/service/model/db/tableModel"
+	"errors"
+)
+
+func InitTable() (err error) {
+	db := db2.ConnectionGorm()
+	res := db.AutoMigrate(&tableModel.Nasabah{})
+	if res.Error != nil {
+		err = errors.New("[migration][initTable] while migrate table")
+		return err
+	}
+
+	defer db.Close()
+
+	return err
+}
