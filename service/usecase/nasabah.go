@@ -95,7 +95,6 @@ func (n nasabahUsecase) CreateNewUser(args model.NasabahRegisterRequest) (err er
 
 	err = n.nasabahRepo.CreateNasabah(createNasabahArgs)
 	if err != nil {
-		err = errors.New("[usecase][nasabah] while CreateNewUser")
 		log.Print(err)
 		return err
 	}
