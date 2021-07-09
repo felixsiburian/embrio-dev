@@ -21,14 +21,14 @@ func main() {
 }
 
 func Start() {
-	fmt.Println("masuk")
 	e := echo.New()
 
 	toolRepo := tools.NewToolRepository()
 	tokenRepo := repository.NewTokenRepository(toolRepo)
 	nasabahRepo := repository.NewNasabahRepository(toolRepo, tokenRepo)
 	nasabahCase := usecase.NewNasabahUsecase(nasabahRepo, toolRepo)
-	router.NewRouter(e, nasabahCase)
-	fmt.Println("keluar")
+	tokenCase := usecase.NewTokenUsecase()
+	router.NewRouter(e, nasabahCase, tokenCase)
+
 	e.Logger.Fatal(e.Start(fmt.Sprintf("%s%s%v", os.Getenv("APP_HOST"), ":", os.Getenv("APP_PORT"))))
 }

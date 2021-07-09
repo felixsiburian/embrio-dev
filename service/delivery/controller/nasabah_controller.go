@@ -11,12 +11,14 @@ import (
 type NasabahController struct {
 	e           *echo.Echo
 	nasabahCase service.INasabahUsecase
+	tokenCase   service.ITokenUsecase
 }
 
-func NewNasabahController(e *echo.Echo, usecase service.INasabahUsecase) *NasabahController {
+func NewNasabahController(e *echo.Echo, usecase service.INasabahUsecase, tokenCase service.ITokenUsecase) *NasabahController {
 	return &NasabahController{
 		e:           e,
 		nasabahCase: usecase,
+		tokenCase:   tokenCase,
 	}
 }
 
@@ -73,5 +75,23 @@ func (ox *NasabahController) Auth(ec echo.Context) error {
 		"id":    "Berhasil",
 		"en":    "Success",
 		"token": tokens,
+	})
+}
+
+func (ox *NasabahController) Ping(ec echo.Context) error {
+	s := ox.nasabahCase.TestExtractToken()
+	resp, err := ox.tokenCase.ExtractTokenResponse(ec)
+	if err != nil {
+		return ec.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"id": "Kesalahan sedang terjadi. Silahkan Ulangi Beberapa saat lagi",
+			"en": "Something went wrong. Please try again later",
+		})
+	}
+
+	return ec.JSON(http.StatusOK, map[string]interface{}{
+		"id":   "Berhasil",
+		"en":   "Success",
+		"resp": resp,
+		"s":    s,
 	})
 }

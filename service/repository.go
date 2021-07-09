@@ -21,4 +21,5 @@ type IToolsRepository interface {
 
 type ITokenRepository interface {
 	CreateToken(args model.CreateTokenArgs) (resp model.NasbahLoginResponses, err error)
+	//ExtractTokenString(c echo.Context) string
 }

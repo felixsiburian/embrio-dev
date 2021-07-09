@@ -8,12 +8,11 @@ import (
 	"embrio-dev/service/model/econst"
 	"embrio-dev/service/repository/queries"
 	"errors"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"time"
 )
-
-var db = db2.ConnectionGorm()
 
 type nasabahRepository struct {
 	toolRepo  service.IToolsRepository
@@ -31,11 +30,12 @@ func NewNasabahRepository(
 }
 
 func (n nasabahRepository) CreateNasabah(args tableModel.Nasabah) (err error) {
+	db := db2.ConnectionGorm()
 	args.IsActive = true
 	args.CreatedBy = econst.AppName
 	args.ModifiedBy = econst.AppName
-	args.CreatedAt = time.Now()
-	args.ModifiedAt = time.Now()
+	args.CreatedDate = time.Now()
+	args.ModifiedDate = time.Now()
 
 	getUserByQuery := db.Exec(queries.QueryGetUserByEmail, args.Email).RowsAffected
 	if getUserByQuery > 0 {
@@ -54,15 +54,16 @@ func (n nasabahRepository) CreateNasabah(args tableModel.Nasabah) (err error) {
 }
 
 func (n nasabahRepository) SignIn(args model.NasbahLoginRequest) (resp model.NasbahLoginResponses, err error) {
+	fmt.Println("args : ", args)
 	var (
 		nasabah         tableModel.Nasabah
 		createTokenArgs model.CreateTokenArgs
+		db              = db2.ConnectionGorm()
 	)
-
-	rows := db.Debug().Model(tableModel.Nasabah{}).Where("username = ?", args.Username).Scan(&nasabah)
+	rows := db.Debug().Model(tableModel.Nasabah{}).Where("username = ?", args.Username).Take(&nasabah)
 	if rows.Error != nil {
 		log.Println(rows.Error.Error())
-		err = errors.New("[repository][nasabah][SignIn] while find user by email")
+		err = errors.New("[repository][nasabah][SignIn] while find user by username")
 		return resp, err
 	}
 
