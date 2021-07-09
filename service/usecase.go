@@ -8,4 +8,5 @@ import (
 
 type INasabahUsecase interface {
 	CreateNewUser(args model.NasabahRegisterRequest) (err error)
+	Auth(args model.NasbahLoginRequest) (resp model.NasbahLoginResponses, err error)
 }

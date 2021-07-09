@@ -3,23 +3,34 @@ package repository
 import (
 	db2 "embrio-dev/lib/db"
 	"embrio-dev/service"
+	"embrio-dev/service/model"
 	"embrio-dev/service/model/db/tableModel"
 	"embrio-dev/service/model/econst"
 	"embrio-dev/service/repository/queries"
 	"errors"
+	"golang.org/x/crypto/bcrypt"
+	"log"
 	"time"
 )
 
+var db = db2.ConnectionGorm()
+
 type nasabahRepository struct {
+	toolRepo  service.IToolsRepository
+	tokenRepo service.ITokenRepository
 }
 
-func NewNasabahRepository(toolRepo service.IToolsRepository) service.INasabahRepository {
-	return nasabahRepository{}
+func NewNasabahRepository(
+	toolRepo service.IToolsRepository,
+	tokenRepo service.ITokenRepository,
+) service.INasabahRepository {
+	return nasabahRepository{
+		toolRepo:  toolRepo,
+		tokenRepo: tokenRepo,
+	}
 }
 
 func (n nasabahRepository) CreateNasabah(args tableModel.Nasabah) (err error) {
-	db := db2.ConnectionGorm()
-
 	args.IsActive = true
 	args.CreatedBy = econst.AppName
 	args.ModifiedBy = econst.AppName
@@ -40,4 +51,38 @@ func (n nasabahRepository) CreateNasabah(args tableModel.Nasabah) (err error) {
 
 	defer db.Close()
 	return err
+}
+
+func (n nasabahRepository) SignIn(args model.NasbahLoginRequest) (resp model.NasbahLoginResponses, err error) {
+	var (
+		nasabah         tableModel.Nasabah
+		createTokenArgs model.CreateTokenArgs
+	)
+
+	rows := db.Debug().Model(tableModel.Nasabah{}).Where("username = ?", args.Username).Scan(&nasabah)
+	if rows.Error != nil {
+		log.Println(rows.Error.Error())
+		err = errors.New("[repository][nasabah][SignIn] while find user by email")
+		return resp, err
+	}
+
+	err = n.toolRepo.VerifyPassword(nasabah.Password, args.Password)
+	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		log.Print(err)
+		err = errors.New("[repository][nasabah][SignIn] while verify password")
+		return resp, err
+	}
+
+	createTokenArgs.NasabahID = nasabah.NasabahID
+	createTokenArgs.Email = nasabah.Email
+	createTokenArgs.Fullname = nasabah.Fullname
+	resp, err = n.tokenRepo.CreateToken(createTokenArgs)
+	if err != nil {
+		log.Print(err)
+		err = errors.New("[repository][nasabah][SignIn] while create token")
+		return resp, err
+	}
+
+	defer db.Close()
+	return resp, err
 }

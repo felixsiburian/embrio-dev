@@ -4,11 +4,9 @@ package config
 
 import (
 	"github.com/joho/godotenv"
-	"github.com/labstack/echo/v4"
 )
 
 type Config struct {
-	echo echo.Echo
 }
 
 func (c *Config) InitEnv() error {

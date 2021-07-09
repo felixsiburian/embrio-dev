@@ -13,4 +13,5 @@ func NewRouter(e *echo.Echo, nasabahCase service.INasabahUsecase) {
 
 	r := e.Group("nasabah/v1")
 	r.POST("/create", c.CreateNewNasabah)
+	r.POST("/auth", c.Auth)
 }

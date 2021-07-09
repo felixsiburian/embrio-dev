@@ -101,3 +101,25 @@ func (n nasabahUsecase) CreateNewUser(args model.NasabahRegisterRequest) (err er
 
 	return err
 }
+
+func (n nasabahUsecase) Auth(args model.NasbahLoginRequest) (resp model.NasbahLoginResponses, err error) {
+	if len(args.Username) <= 0 {
+		err = errors.New("invalid username")
+		log.Print(err)
+		return resp, err
+	}
+
+	if len(args.Password) <= 0 {
+		err = errors.New("invalid password")
+		log.Print(err)
+		return resp, err
+	}
+
+	resp, err = n.nasabahRepo.SignIn(args)
+	if err != nil {
+		log.Println(err)
+		return resp, err
+	}
+
+	return resp, err
+}
