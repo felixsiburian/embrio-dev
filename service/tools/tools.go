@@ -35,6 +35,16 @@ func (t toolRepository) SaltAndHash(pwd string) (s string, err error) {
 	return string(bytes), err
 }
 
+func (t toolRepository) VerifyPassword(hashedPwd, pwd string) (err error) {
+	err = bcrypt.CompareHashAndPassword([]byte(hashedPwd), []byte(pwd))
+	if err != nil {
+		log.Print(err)
+		err = errors.New("[repository][tool][VerifyPassword] while CompareHashAndPassword")
+	}
+
+	return err
+}
+
 func (t toolRepository) CheckEmailValidation(email string) (res bool, err error) {
 	var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 	if len(email) < 3 && len(email) > 254 {
@@ -58,6 +68,13 @@ func (t toolRepository) CheckEmailValidation(email string) (res bool, err error)
 	}
 
 	return true, err
+}
+
+func (t toolRepository) GUID() string {
+	guid := uuid.NewV1()
+	guid = uuid.NewV4()
+
+	return guid.String()
 }
 
 func CheckArr(a []string, s string) bool {
@@ -101,11 +118,4 @@ func SHA1(val string) string {
 	}
 
 	return hex.EncodeToString(sha.Sum(nil))
-}
-
-func GUID() string {
-	guid := uuid.NewV1()
-	guid = uuid.NewV4()
-
-	return guid.String()
 }

@@ -17,7 +17,6 @@ func main() {
 	app := econfig.Config{}
 	econfig.CatchEror(app.InitEnv())
 	//econfig.CatchEror(migration.InitTable())
-
 	Start()
 }
 
@@ -25,9 +24,11 @@ func Start() {
 	e := echo.New()
 
 	toolRepo := tools.NewToolRepository()
-	nasabahRepo := repository.NewNasabahRepository(toolRepo)
+	tokenRepo := repository.NewTokenRepository(toolRepo)
+	nasabahRepo := repository.NewNasabahRepository(toolRepo, tokenRepo)
 	nasabahCase := usecase.NewNasabahUsecase(nasabahRepo, toolRepo)
-	router.NewRouter(e, nasabahCase)
+	tokenCase := usecase.NewTokenUsecase()
+	router.NewRouter(e, nasabahCase, tokenCase)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf("%s%s%v", os.Getenv("APP_HOST"), ":", os.Getenv("APP_PORT"))))
 }
