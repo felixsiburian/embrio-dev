@@ -29,3 +29,13 @@ func (ox *MiddlewareController) SetAuthentication(next echo.HandlerFunc) echo.Ha
 		return next(c)
 	}
 }
+
+func (ox *MiddlewareController) SetRefreshAuthentication(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		err := ox.tokenCase.RefreshTokenValid(c)
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, err.Error())
+		}
+		return next(c)
+	}
+}

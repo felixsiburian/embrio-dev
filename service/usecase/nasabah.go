@@ -5,7 +5,6 @@ import (
 	"embrio-dev/service/model"
 	"embrio-dev/service/model/db/tableModel"
 	"errors"
-	"fmt"
 	"log"
 	"strings"
 )
@@ -123,10 +122,4 @@ func (n nasabahUsecase) Auth(args model.NasbahLoginRequest) (resp model.NasbahLo
 	}
 
 	return resp, err
-}
-
-func (n nasabahUsecase) TestExtractToken() (s string) {
-	fmt.Println("masukkk")
-	s = "PING"
-	return s
 }
