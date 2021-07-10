@@ -27,7 +27,7 @@ func Start() {
 	tokenRepo := repository.NewTokenRepository(toolRepo)
 	nasabahRepo := repository.NewNasabahRepository(toolRepo, tokenRepo)
 	nasabahCase := usecase.NewNasabahUsecase(nasabahRepo, toolRepo)
-	tokenCase := usecase.NewTokenUsecase()
+	tokenCase := usecase.NewTokenUsecase(tokenRepo)
 	router.NewRouter(e, nasabahCase, tokenCase)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf("%s%s%v", os.Getenv("APP_HOST"), ":", os.Getenv("APP_PORT"))))

@@ -8,7 +8,6 @@ import (
 	"embrio-dev/service/model/econst"
 	"embrio-dev/service/repository/queries"
 	"errors"
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"time"
@@ -54,7 +53,6 @@ func (n nasabahRepository) CreateNasabah(args tableModel.Nasabah) (err error) {
 }
 
 func (n nasabahRepository) SignIn(args model.NasbahLoginRequest) (resp model.NasbahLoginResponses, err error) {
-	fmt.Println("args : ", args)
 	var (
 		nasabah         tableModel.Nasabah
 		createTokenArgs model.CreateTokenArgs
