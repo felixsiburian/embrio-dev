@@ -9,12 +9,14 @@ import (
 
 type ITokenUsecase interface {
 	TokenValid(c echo.Context) error
+	RefreshTokenValid(c echo.Context) error
 	ExtractTokenString(c echo.Context) string
 	ExtractTokenResponse(c echo.Context) (resp model.TokenResponse, err error)
+	ExtractRefreshTokenResponse(c echo.Context) (resp model.TokenResponse, err error)
+	RefreshToken(c echo.Context) (resp model.NasbahLoginResponses, err error)
 }
 
 type INasabahUsecase interface {
 	CreateNewUser(args model.NasabahRegisterRequest) (err error)
 	Auth(args model.NasbahLoginRequest) (resp model.NasbahLoginResponses, err error)
-	TestExtractToken() (s string)
 }

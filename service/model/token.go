@@ -13,3 +13,7 @@ type TokenResponse struct {
 	Fullname    string
 	Email       string
 }
+
+type RefreshTokenArgs struct {
+	RefreshToken string `json:"refres_token"`
+}
