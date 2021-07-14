@@ -8,6 +8,7 @@ type Nasabah struct {
 	Fullname     string    `json:"fullname"`
 	Email        string    `json:"email"`
 	PhoneNumber  string    `json:"phone_number"`
+	Alamat       string    `json:"alamat"`
 	Pin          string    `json:"pin"`
 	Password     string    `json:"password"`
 	IsActive     bool      `json:"is_active"`

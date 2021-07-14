@@ -84,6 +84,12 @@ func (n nasabahUsecase) CreateNewUser(args model.NasabahRegisterRequest) (err er
 			log.Print(err)
 			return err
 		}
+
+		if len(args.Alamat) <= 0 {
+			err = errors.New("invalid alamat")
+			log.Print(err)
+			return err
+		}
 	}
 
 	createNasabahArgs.Username = args.Username
@@ -92,6 +98,7 @@ func (n nasabahUsecase) CreateNewUser(args model.NasabahRegisterRequest) (err er
 	createNasabahArgs.PhoneNumber = args.PhoneNumber
 	createNasabahArgs.Pin = hashedPin
 	createNasabahArgs.Password = hashedPass
+	createNasabahArgs.Alamat = args.Alamat
 
 	err = n.nasabahRepo.CreateNasabah(createNasabahArgs)
 	if err != nil {
