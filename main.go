@@ -3,6 +3,7 @@
 package main
 
 import (
+	"embrio-dev/lib/migration"
 	econfig "embrio-dev/service/config"
 	"embrio-dev/service/delivery/router"
 	"embrio-dev/service/repository"
@@ -16,7 +17,7 @@ import (
 func main() {
 	app := econfig.Config{}
 	econfig.CatchEror(app.InitEnv())
-	//econfig.CatchEror(migration.InitTable())
+	econfig.CatchEror(migration.InitTable())
 	Start()
 }
 
