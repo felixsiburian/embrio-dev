@@ -36,7 +36,7 @@ func (n nasabahRepository) CreateNasabah(args tableModel.Nasabah) (err error) {
 	args.CreatedDate = time.Now()
 	args.ModifiedDate = time.Now()
 
-	getUserByQuery := db.Exec(queries.QueryGetUserByEmail, args.Email).RowsAffected
+	getUserByQuery := db.Exec(queries.QueryGetUserByEmail, args.Email, args.Username).RowsAffected
 	if getUserByQuery > 0 {
 		err = errors.New("[repository][nasabah][CreateNasabah] nasabah already exists")
 		return err
