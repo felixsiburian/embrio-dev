@@ -1,6 +1,6 @@
-# embrio-dev
+# Catalyst-BE
 
-## This repository is for embrio BRI project
+## This repository is for embrio BRI project (Team 12)
 
 # How to Develop in this repository
 ### 1. Clone the repository with branch master as the base branch
