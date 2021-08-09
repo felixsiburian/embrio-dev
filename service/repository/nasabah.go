@@ -30,7 +30,9 @@ func NewNasabahRepository(
 
 func (n nasabahRepository) CreateNasabah(args tableModel.Nasabah) (err error) {
 	db := db2.ConnectionGorm()
+
 	args.IsActive = true
+	args.IsFirstLogin = true
 	args.CreatedBy = econst.AppName
 	args.ModifiedBy = econst.AppName
 	args.CreatedDate = time.Now()
@@ -84,4 +86,18 @@ func (n nasabahRepository) SignIn(args model.NasbahLoginRequest) (resp model.Nas
 
 	defer db.Close()
 	return resp, err
+}
+
+func (n nasabahRepository) GetNasabahInfo(nasabahID int64) (res tableModel.GetNasabahList, err error) {
+	db := db2.ConnectionGorm()
+
+	resp := db.Debug().Raw(queries.QueryGetNasabahByID, nasabahID).Scan(&res)
+	if resp.Error != nil {
+		log.Println(resp.Error)
+		err = errors.New("while query get nasabah")
+		return res, err
+	}
+
+	defer db.Close()
+	return res, err
 }

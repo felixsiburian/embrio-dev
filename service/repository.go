@@ -10,6 +10,7 @@ import (
 type INasabahRepository interface {
 	SignIn(args model.NasbahLoginRequest) (resp model.NasbahLoginResponses, err error)
 	CreateNasabah(args tableModel.Nasabah) (err error)
+	GetNasabahInfo(nasabahID int64) (res tableModel.GetNasabahList, err error)
 }
 
 type IToolsRepository interface {
@@ -22,4 +23,11 @@ type IToolsRepository interface {
 type ITokenRepository interface {
 	CreateToken(args model.CreateTokenArgs) (resp model.NasbahLoginResponses, err error)
 	//ExtractTokenString(c echo.Context) string
+}
+
+type IRekeningRepository interface {
+	TopUpRekening(args tableModel.TopUpRekeningArgs) (err error)
+	CreateRekening(args tableModel.Rekening) (err error)
+	GetNasabahSaldo(nasabahID int64, noRekening string) (res tableModel.GetSaldoNasabah, err error)
+	TopUpSaldo(args tableModel.TopUpRekeningArgs) (err error)
 }

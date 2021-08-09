@@ -40,6 +40,7 @@ func (t toolRepository) VerifyPassword(hashedPwd, pwd string) (err error) {
 	if err != nil {
 		log.Print(err)
 		err = errors.New("[repository][tool][VerifyPassword] while CompareHashAndPassword")
+		return err
 	}
 
 	return err

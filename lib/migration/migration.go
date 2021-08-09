@@ -12,7 +12,7 @@ import (
 func InitTable() (err error) {
 	db := db2.ConnectionGorm()
 
-	res := db.AutoMigrate(&tableModel.Nasabah{})
+	res := db.AutoMigrate(&tableModel.Nasabah{}, &tableModel.Rekening{})
 	if res.Error != nil {
 		err = errors.New("[migration][initTable] while migrate table")
 		return err
