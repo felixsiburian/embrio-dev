@@ -22,6 +22,7 @@ func NewRouter(e *echo.Echo, nasabahCase service.INasabahUsecase,
 	r.POST("/rekening/create", re.CreateRekening, m.SetAuthentication)
 	r.GET("/rekening/saldo/view", re.GetSaldoNasabah, m.SetAuthentication)
 	r.POST("/rekening/saldo/topup", re.TopUpSaldoNasabah, m.SetAuthentication)
+	r.POST("/rekening/saldo/tarik", re.TarikTunai, m.SetAuthentication)
 
 	r.POST("/refresh", t.Refresh, m.SetRefreshAuthentication)
 

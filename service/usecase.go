@@ -26,4 +26,5 @@ type IRekeningUsecase interface {
 	CreateRekening(args tableModel.Rekening) (err error)
 	GetSaldoNasabah(nasabahID int64, noRekening string) (res tableModel.GetSaldoNasabah, err error)
 	TopUpSaldoNasabah(args tableModel.TopUpRekeningArgs) (err error)
+	TarikSaldo(args tableModel.TarikTunaiArgs) (err error)
 }

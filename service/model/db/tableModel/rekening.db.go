@@ -33,4 +33,12 @@ type (
 		IsActive    bool
 		CreatedDate time.Time
 	}
+
+	TarikTunaiArgs struct {
+		NasabahID   int64     `json:"nasabah_id"`
+		NoRekening  string    `json:"no_rekening"`
+		Amount      int64     `json:"amount"`
+		OperatedBy  string    `json:"operated_by"`
+		CreatedDate time.Time `json:"created_date"`
+	}
 )

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"time"
 )
 
 type RekeningHandler struct {
@@ -113,8 +114,46 @@ func (ox *RekeningHandler) TopUpSaldoNasabah(ec echo.Context) error {
 			"internal_msg": err.Error(),
 		})
 	}
+
 	return ec.JSON(http.StatusOK, map[string]interface{}{
-		"id": "Berhasil",
-		"en": "Success",
+		"id":               "Berhasil",
+		"en":               "Success",
+		"transaction_time": time.Now().Format(time.RFC822),
+	})
+}
+
+func (ox *RekeningHandler) TarikTunai(ec echo.Context) error {
+	nasabahInfo, err := ox.tokenCase.ExtractTokenResponse(ec)
+	if err != nil {
+		return ec.JSON(http.StatusUnauthorized, map[string]interface{}{
+			"id": "Kesalahan sedang terjadi. Silahkan Ulangi Beberapa saat lagi",
+			"en": "Something went wrong. Please try again later",
+		})
+	}
+
+	var form tableModel.TarikTunaiArgs
+	err = json.NewDecoder(ec.Request().Body).Decode(&form)
+	if err != nil {
+		return ec.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"id": "Kesalahan sedang terjadi. Silahkan Ulangi Beberapa saat lagi",
+			"en": "Something went wrong. Please try again later",
+		})
+	}
+
+	form.NasabahID = nasabahInfo.NasabahID
+	form.OperatedBy = nasabahInfo.Fullname
+	err = ox.rekeningCase.TarikSaldo(form)
+	if err != nil {
+		return ec.JSON(http.StatusInternalServerError, map[string]interface{}{
+			"id":           "Kesalahan sedang terjadi. Silahkan Ulangi Beberapa saat lagi",
+			"en":           "Something went wrong. Please try again later",
+			"internal_msg": err.Error(),
+		})
+	}
+
+	return ec.JSON(http.StatusOK, map[string]interface{}{
+		"id":               "Berhasil",
+		"en":               "Success",
+		"transaction_time": time.Now().Format(time.RFC822),
 	})
 }

@@ -27,7 +27,9 @@ type ITokenRepository interface {
 
 type IRekeningRepository interface {
 	TopUpRekening(args tableModel.TopUpRekeningArgs) (err error)
+	DeductionRekening(args tableModel.TopUpRekeningArgs) (err error)
 	CreateRekening(args tableModel.Rekening) (err error)
 	GetNasabahSaldo(nasabahID int64, noRekening string) (res tableModel.GetSaldoNasabah, err error)
 	TopUpSaldo(args tableModel.TopUpRekeningArgs) (err error)
+	TarikSaldo(args tableModel.TarikTunaiArgs) (err error)
 }

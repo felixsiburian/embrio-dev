@@ -80,3 +80,23 @@ func (r rekeningUsecase) TopUpSaldoNasabah(args tableModel.TopUpRekeningArgs) (e
 
 	return err
 }
+
+func (r rekeningUsecase) TarikSaldo(args tableModel.TarikTunaiArgs) (err error) {
+	if len(args.NoRekening) < 12 {
+		err = errors.New("invalid no rekening")
+		return err
+	}
+
+	if args.Amount <= 50000 {
+		err = errors.New("invalid amount")
+		return err
+	}
+
+	err = r.rekeningRepo.TarikSaldo(args)
+	if err != nil {
+		err = errors.New("Failed to Tarik Tunai")
+		return err
+	}
+
+	return err
+}

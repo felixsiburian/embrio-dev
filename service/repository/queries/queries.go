@@ -22,7 +22,7 @@ const (
 		WHERE
 			nasabah_id = $3 AND
 			no_rekening = $4
-`
+	`
 
 	QueryGetNasabahByID = "SELECT " +
 		"n.username, n.fullname, n.email, n.phone_number, n.alamat, n.created_date " +
