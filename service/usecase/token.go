@@ -192,8 +192,6 @@ func (ox tokenUsecase) RefreshToken(c echo.Context) (resp model.NasbahLoginRespo
 		tokenInfo.Email = fmt.Sprintf("%s", email)
 	}
 
-	//TODO: Delete previous refresh token must be here
-
 	//create new token here
 	newToken, err := ox.tokenRepo.CreateToken(tokenInfo)
 	if err != nil {

@@ -24,20 +24,24 @@ const (
 			no_rekening = $4
 	`
 
-	QueryGetNasabahByID = "SELECT " +
-		"n.username, n.fullname, n.email, n.phone_number, n.alamat, n.created_date " +
-		"FROM " +
-		"nasabahs n " +
-		"WHERE " +
-		"n.nasabah_id = $1"
+	QueryGetNasabahByID = `
+		SELECT
+			n.username, n.fullname, n.email, n.phone_number, n.alamat, n.created_date
+		FROM
+			nasabahs n
+		WHERE
+			n.nasabah_id = $1
+	`
 
-	QueryGetSaldoNasabah = "SELECT " +
-		"n.fullname, r.no_rekening, r.cabang_bank, r.saldo, r.is_active, r.created_date " +
-		"FROM " +
-		"rekenings r " +
-		"LEFT JOIN nasabahs n " +
-		"on r.nasabah_id = n.nasabah_id " +
-		"WHERE " +
-		"r.nasabah_id = $1 AND " +
-		"r.no_rekening = $2"
+	QueryGetSaldoNasabah = `
+		SELECT
+			n.fullname, r.no_rekening, r.cabang_bank, r.saldo, r.is_active, r.created_date
+		FROM
+			rekenings r
+		LEFT JOIN nasabahs n
+			on r.nasabah_id = n.nasabah_id
+		WHERE
+			r.nasabah_id = $1 AND
+			r.no_rekening = $2
+	`
 )

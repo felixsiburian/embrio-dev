@@ -18,6 +18,5 @@ func ConnectionGorm() *gorm.DB {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Yayy we are connected")
 	return db
 }
